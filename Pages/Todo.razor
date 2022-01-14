@@ -1,0 +1,45 @@
+﻿@page "/todo"
+@using BlazorBeginners.Data
+
+<h1>Todo</h1>
+
+<ul>
+    @foreach (TodoItem Todo in Todos)
+    {
+        <li>@Todo.Name @Todo.DueDate</li>
+    }
+</ul>
+
+<input @bind="NewTodoName" type="text" placeholder="New Todo Name" />
+<input @bind="NewDueDate" type="date" placeholder="Due Date" />
+<button @onclick="Save">Save</button>
+
+@code {
+    private List<TodoItem> Todos = new();
+    private string NewTodoName = string.Empty;
+    private DateTime? NewDueDate = null;
+
+    private void Save()
+    {
+        if (string.IsNullOrEmpty(NewTodoName)) return;
+
+        if (NewDueDate == null)
+        {
+            Todos.Add(new TodoItem
+            {
+                Name = NewTodoName
+            });
+        }
+        else
+        {
+            Todos.Add(new TodoItem
+            {
+                Name = NewTodoName,
+                DueDate = (DateTime)NewDueDate
+            });
+        }
+
+        NewTodoName = string.Empty;
+
+    }
+}
