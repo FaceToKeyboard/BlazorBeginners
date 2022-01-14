@@ -6,15 +6,16 @@
 <ul>
     @foreach (TodoItem Todo in Todos)
     {
-        <li>@Todo.Name @Todo.DueDate</li>
+        <li>@Todo.Name @Todo.DueDate @Todo.DueTime</li>
     }
 </ul>
 
 <input @bind="NewTodoName" @bind:event="oninput" type="text" placeholder="New Todo Name" />
-<input @bind="NewDueDate" type="date" placeholder="Due Date" />
+<input @bind="NewDueDate" @bind:event="oninput" type="date" placeholder="Due Date" />
+<input @bind="NewDueTime" @bind:event="oninput" type="time" placeholder="Due Time" />
 <button @onclick="Save">Save</button>
 
-@if (NewTodoName != null)
+@if (NewTodoName != string.Empty)
 {
     <p>@NewTodoName - Due: @NewDueDate</p> 
 }
@@ -22,29 +23,23 @@
 @code {
     private List<TodoItem> Todos = new();
     private string NewTodoName = string.Empty;
-    private DateTime? NewDueDate = null;
+    private DateOnly? NewDueDate = null;
+    private TimeOnly? NewDueTime = null;
 
     private void Save()
     {
         if (string.IsNullOrEmpty(NewTodoName)) return;
 
-        if (NewDueDate == null)
-        {
-            Todos.Add(new TodoItem
-            {
-                Name = NewTodoName
-            });
-        }
-        else
-        {
-            Todos.Add(new TodoItem
+        Todos.Add(new TodoItem
             {
                 Name = NewTodoName,
-                DueDate = NewDueDate
+                DueDate = NewDueDate,
+                DueTime = NewDueTime
             });
-        }
 
         NewTodoName = string.Empty;
+        NewDueDate = null;
+        NewDueTime = null;
 
     }
 }
