@@ -10,9 +10,14 @@
     }
 </ul>
 
-<input @bind="NewTodoName" type="text" placeholder="New Todo Name" />
+<input @bind="NewTodoName" @bind:event="oninput" type="text" placeholder="New Todo Name" />
 <input @bind="NewDueDate" type="date" placeholder="Due Date" />
 <button @onclick="Save">Save</button>
+
+@if (NewTodoName != null)
+{
+    <p>@NewTodoName - Due: @NewDueDate</p> 
+}
 
 @code {
     private List<TodoItem> Todos = new();
@@ -35,7 +40,7 @@
             Todos.Add(new TodoItem
             {
                 Name = NewTodoName,
-                DueDate = (DateTime)NewDueDate
+                DueDate = NewDueDate
             });
         }
 
